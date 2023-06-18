@@ -1,10 +1,19 @@
 import Link from "next/link";
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { useRoom } from "@/contexts/roomContext";
 
 export default function Header() {
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false)
   const [createRoomModalOpen, setCreateRoomModalOpen] = useState(false)
+
+  const { createRoom } = useRoom()
+
+  function createRoomAndCloseModal() {
+    createRoom()
+    setCreateRoomModalOpen(false)
+  }
+
   return (
     <>
       <header className="flex justify-between items-center px-8 py-6 border-b">
@@ -96,7 +105,9 @@ export default function Header() {
                   <div className="flex flex-col my-4 text-black gap-1 h-full">
                     <input placeholder="seu nome" className="border border-gray-800 px-2 py-1 rounded text-black" type="text" name="username" id="username" />
                   </div>
-                  <button type="submit" className="ml-auto px-2 py-1 flex border border-gray-800 rounded flex-1 items-center justify-center text-gray-950">Criar</button>
+                  <button type="submit" className="ml-auto px-2 py-1 flex border border-gray-800 rounded flex-1 items-center justify-center text-gray-950"
+                  onClick={createRoomAndCloseModal}
+                  >Criar</button>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
