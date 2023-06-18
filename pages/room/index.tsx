@@ -38,7 +38,6 @@ export default function Room() {
   return (
     <main>
       <Header leave />
-      <h1>Room {roomId}</h1>
       <Chat />
     </main>
   )

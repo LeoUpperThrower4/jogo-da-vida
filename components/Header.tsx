@@ -16,7 +16,7 @@ export default function Header({ leave }: HeaderProps) {
   const [username, setUsername] = useState('')
   const [roomId, setRoomId] = useState('')
 
-  const { createRoom, leaveRoom, joinRoom } = useRoom()
+  const { createRoom, leaveRoom, joinRoom, roomId: currentRoomId } = useRoom()
   const { endConnection } = useWebSocket()
 
   async function createRoomAndCloseModal() {
@@ -39,13 +39,32 @@ export default function Header({ leave }: HeaderProps) {
     Router.push('/')
   }
 
+  async function handleCopyCodeClick() {
+    try {
+      if (typeof window !== 'undefined') {
+        await navigator.clipboard.writeText(currentRoomId);
+        alert('Código da sala copiado!');
+      }
+    } catch (error) {
+      console.error('Failed to copy to clipboard:', error);
+      alert('Erro ao copiar o código da sala. Tente novamente.');
+    }
+  }
+
   return (
     <>
       <header className="flex justify-between items-center px-8 py-6 border-b">
         <Link href="/">Logo</Link>
         <div className="flex items-center justify-center gap-2">
           {leave ? (
-            <button className="p-2 border rounded" onClick={handleLeaveClick}>Sair da sala</button>
+            <>
+              <button className="transition-all p-2 border bg-gray-300 text-gray-900 border-white rounded hover:opacity-70" onClick={handleCopyCodeClick}>
+                Copiar código da sala
+              </button>
+              <button className="p-2 border rounded" onClick={handleLeaveClick}>
+                Sair da sala
+              </button>
+            </>
           ) : 
           (
             <>
