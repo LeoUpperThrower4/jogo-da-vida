@@ -3,11 +3,13 @@ import { useRoom } from './roomContext'
 
 interface WebSocketContextValue {
   getConnectionForRoom: (roomId: string) => WebSocket | null
+  createConnection: (roomId: string) => WebSocket | null
   endConnection: () => void
 }
 
 const WebSocketContext = createContext<WebSocketContextValue>({
   getConnectionForRoom: () => null,
+  createConnection: () => null,
   endConnection: () => {},
 })
 
@@ -24,11 +26,6 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     if (roomId === currentRoomId && currentSocket) {
       return currentSocket
     } else {
-      const createdSocket = createConnection(roomId)
-      if (createdSocket) {
-        setCurrentSocket(createdSocket)
-        return createdSocket
-      }
       return null
     }
   }
@@ -68,6 +65,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     <WebSocketContext.Provider
       value={{
         getConnectionForRoom,
+        createConnection,
         endConnection,
       }}
     >
