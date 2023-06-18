@@ -4,6 +4,7 @@ export default function Home() {
   return (
     <main>
       <Header />
+      Explicação do jogo
     </main>
   )
 }
