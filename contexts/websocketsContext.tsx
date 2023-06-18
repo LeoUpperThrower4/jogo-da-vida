@@ -4,12 +4,16 @@ import { useRoom } from './roomContext'
 interface WebSocketContextValue {
   getConnectionForRoom: (roomId: string) => WebSocket | null
   createConnection: (roomId: string) => WebSocket | null
+  setCurrentSocket: (socket: WebSocket) => void
+  emitChatMessage: (content: string) => void
   endConnection: () => void
 }
 
 const WebSocketContext = createContext<WebSocketContextValue>({
   getConnectionForRoom: () => null,
   createConnection: () => null,
+  setCurrentSocket: () => {},
+  emitChatMessage: () => {},
   endConnection: () => {},
 })
 
@@ -19,7 +23,7 @@ interface WebSocketProviderProps {
 
 export function WebSocketProvider({ children }: WebSocketProviderProps) {
   const [currentSocket, setCurrentSocket] = useState<WebSocket | null>(null)
-  const { roomId: currentRoomId } = useRoom()
+  const { roomId: currentRoomId, userId } = useRoom()
 
   function getConnectionForRoom(roomId: string): WebSocket | null {
     if (!(currentRoomId && roomId)) return null
@@ -30,22 +34,23 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     }
   }
 
+  function emitChatMessage(content: string) {
+    if (!currentSocket) return
+    currentSocket.send(
+      JSON.stringify({
+        for: 'chat',
+        type: 'message',
+        content,
+        userId
+      })
+    )
+  }
+
   function createConnection(roomId: string): WebSocket | null {
     if (!roomId) return null
-    endConnection()
     const socket = new WebSocket(`ws://localhost:3333/room/${roomId}`)
     socket.onopen = () => {
       console.log('WebSocket connection established')
-    }
-
-    socket.onmessage = (event) => {
-      const message = JSON.parse(event.data)
-      // Handle the received message as needed
-      console.log('Received WebSocket message:', message)
-      if (message.for === 'chat') {
-        // Add the message to the chat messages context
-        console.log('Adding message to chat messages context:', message)
-      }
     }
 
     socket.onclose = (event) => {
@@ -65,7 +70,9 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     <WebSocketContext.Provider
       value={{
         getConnectionForRoom,
+        setCurrentSocket,
         createConnection,
+        emitChatMessage,
         endConnection,
       }}
     >

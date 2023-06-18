@@ -1,3 +1,4 @@
+import { ChatMessagesProvider } from '@/contexts/chatMessageContext'
 import { RoomProvider } from '@/contexts/roomContext'
 import { WebSocketProvider } from '@/contexts/websocketsContext'
 import '@/styles/globals.css'
@@ -7,7 +8,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <RoomProvider>
       <WebSocketProvider>
-        <Component {...pageProps} />
+        <ChatMessagesProvider>
+          <Component {...pageProps} />
+        </ChatMessagesProvider>
       </WebSocketProvider>
     </RoomProvider>
   )
