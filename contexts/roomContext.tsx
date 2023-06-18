@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from "react"
 interface RoomContextData {
   roomId: string
   createRoom: (owner: string) => Promise<CreateRoomResponse> | void
-  joinRoom: (roomId: string) => Promise<boolean> | void
+  joinRoom: (username: string, roomId: string) => Promise<boolean> | void
   leaveRoom: () => void
 }
 
@@ -20,6 +20,7 @@ interface CreateRoomResponse {
 
 export function RoomProvider({children}: RoomProviderProps) {
   const [roomId, setRoomId] = useState('')
+  
   async function createRoom(owner: string) {
     console.log('create room for: ', owner)
     try {
@@ -36,10 +37,10 @@ export function RoomProvider({children}: RoomProviderProps) {
     }
   }
 
-  async function joinRoom(roomId: string) {
+  async function joinRoom(username: string, roomId: string) {
     console.log('join room', roomId)
     try {
-      const response = await api.post(`/room/${roomId}/join`)
+      const response = await api.post(`/room/${roomId}/join`, { username })
       if (response.status !== 200) {
         console.log('error joining room')
         setRoomId('')

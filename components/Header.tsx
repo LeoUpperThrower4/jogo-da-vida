@@ -16,19 +16,26 @@ export default function Header({ leave }: HeaderProps) {
   const [username, setUsername] = useState('')
   const [roomId, setRoomId] = useState('')
 
-  const { createRoom, leaveRoom } = useRoom()
+  const { createRoom, leaveRoom, joinRoom } = useRoom()
   const { endConnection } = useWebSocket()
 
   async function createRoomAndCloseModal() {
     setCreateRoomModalOpen(false)
     const newRoomId = await createRoom(username)
     if (!newRoomId) return
-    Router.push(`/room/${newRoomId.roomId}`)
+    Router.push(`/room`)
+  }
+
+  async function handleJoinRoomClick() {
+    setJoinRoomModalOpen(false)
+    const joinedRoom = await joinRoom(username, roomId)
+    if (joinedRoom) Router.push(`/room`)
+    else alert('Erro ao entrar na sala. Tente novamente.')
   }
 
   function handleLeaveClick() {
-    leaveRoom()
     endConnection()
+    leaveRoom()
     Router.push('/')
   }
 
@@ -48,6 +55,7 @@ export default function Header({ leave }: HeaderProps) {
           )}
         </div>
       </header>
+      {/* Join room modal */}
       <Transition.Root show={joinRoomModalOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setJoinRoomModalOpen}>
           <Transition.Child
@@ -77,22 +85,42 @@ export default function Header({ leave }: HeaderProps) {
                   <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
                     Entre em uma sala
                   </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Digite o código da sala que você deseja entrar.
-                    </p>
-                  </div>
-                  <div className="flex flex-col my-4 text-black gap-1 h-full">
-                  <input placeholder="seu nome" className="border border-gray-800 px-2 py-1 rounded text-black" type="text" name="username" id="username" />
-                  <input placeholder="id da sala" className="border border-gray-800 px-2 py-1 rounded text-black" type="text" name="roomId" id="roomId" />
-                  </div>
-                  <button type="submit" className="ml-auto px-2 py-1 flex border border-gray-800 rounded flex-1 items-center justify-center text-gray-950">Entrar</button>
+                  <label className="block text-sm text-gray-500 mt-2" htmlFor="roomId">
+                    Código da sala:
+                  </label>
+                  <input 
+                    placeholder="id da sala" 
+                    className="mt-1 border border-gray-800 px-2 py-1 rounded text-black w-full" 
+                    type="text" 
+                    name="roomId" 
+                    id="roomId"
+                    onChange={(e) => { setRoomId(e.target.value) }}
+                  />
+                  <label className="block text-sm text-gray-500 mt-2">
+                    Seu nome:
+                  </label>
+                  <input 
+                    placeholder="seu nome" 
+                    className="mt-1 border border-gray-800 px-2 py-1 rounded text-black w-full" 
+                    type="text" 
+                    name="username" 
+                    id="username" 
+                    onChange={(e) => { setUsername(e.target.value) }} 
+                  />
+                  <button 
+                    type="submit" 
+                    className="ml-auto mt-2 px-2 py-1 flex border border-gray-800 rounded flex-1 items-center justify-center text-gray-950"
+                    onClick={handleJoinRoomClick}
+                  >
+                    Entrar
+                  </button>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
           </div>
         </Dialog>
       </Transition.Root>
+      {/* Create room modal */}
       <Transition.Root show={createRoomModalOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setCreateRoomModalOpen}>
           <Transition.Child
