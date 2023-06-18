@@ -4,19 +4,29 @@ import { Dialog, Transition } from '@headlessui/react'
 import { useRoom } from "@/contexts/roomContext";
 import Router from "next/router";
 
-export default function Header() {
+interface HeaderProps {
+  leave?: boolean
+}
+
+export default function Header({ leave }: HeaderProps) {
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false)
   const [createRoomModalOpen, setCreateRoomModalOpen] = useState(false)
 
   const [username, setUsername] = useState('')
   const [roomId, setRoomId] = useState('')
 
-  const { createRoom } = useRoom()
+  const { createRoom, leaveRoom } = useRoom()
 
-  function createRoomAndCloseModal() {
-    createRoom(username)
+  async function createRoomAndCloseModal() {
     setCreateRoomModalOpen(false)
-    Router.push(`/room/${roomId}`)
+    const newRoomId = await createRoom(username)
+    if (!newRoomId) return
+    Router.push(`/room/${newRoomId.roomId}`)
+  }
+
+  function handleLeaveClick() {
+    leaveRoom()
+    Router.push('/')
   }
 
   return (
@@ -24,8 +34,15 @@ export default function Header() {
       <header className="flex justify-between items-center px-8 py-6 border-b">
         <Link href="/">Logo</Link>
         <div className="flex items-center justify-center gap-2">
-          <button className="p-2 border rounded" onClick={() => setCreateRoomModalOpen(true)}>Criar sala</button>
-          <button className="p-2 border rounded" onClick={() => setJoinRoomModalOpen(true)}>Entrar em uma sala</button>
+          {leave ? (
+            <button className="p-2 border rounded" onClick={handleLeaveClick}>Sair da sala</button>
+          ) : 
+          (
+            <>
+              <button className="p-2 border rounded" onClick={() => setCreateRoomModalOpen(true)}>Criar sala</button>
+              <button className="p-2 border rounded" onClick={() => setJoinRoomModalOpen(true)}>Entrar em uma sala</button>
+            </>
+          )}
         </div>
       </header>
       <Transition.Root show={joinRoomModalOpen} as={Fragment}>
