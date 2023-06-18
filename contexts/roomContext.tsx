@@ -1,8 +1,9 @@
+import { api } from "@/services/api"
 import { createContext, useContext } from "react"
 
 interface RoomContextData {
   roomId: string
-  createRoom: () => void
+  createRoom: (owner: string) => Promise<CreateRoomResponse> | void
   joinRoom: (roomId: string) => void
 }
 
@@ -12,9 +13,19 @@ interface RoomProviderProps {
   children: React.ReactNode
 }
 
+interface CreateRoomResponse {
+  roomId: string
+}
+
 export function RoomProvider({children}: RoomProviderProps) {
-  function createRoom() {
-    console.log('create room')
+  async function createRoom(owner: string) {
+    console.log('create room for: ', owner)
+    const response = await api.post(`/room`, { username: owner })
+    if (response.status !== 201) {
+      console.log('error creating room')
+      return
+    }
+    return response.data
   }
 
   function joinRoom(roomId: string) {
