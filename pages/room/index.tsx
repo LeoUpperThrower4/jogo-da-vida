@@ -6,9 +6,10 @@ import { useEffect } from "react";
 
 export default function Room() {
   const { roomId } = useRoom()
-  const { getConnectionForRoom } = useWebSocket()
+  const { getConnectionForRoom, createConnection } = useWebSocket()
 
-  const socket = getConnectionForRoom(roomId)
+  let socket = getConnectionForRoom(roomId)
+  if (!socket) socket = createConnection(roomId)
 
   useEffect(() => {
     if (!roomId) Router.push('/')
