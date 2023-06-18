@@ -3,6 +3,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useRoom } from "@/contexts/roomContext";
 import Router from "next/router";
+import { useWebSocket } from "@/contexts/websocketsContext";
 
 interface HeaderProps {
   leave?: boolean
@@ -16,6 +17,7 @@ export default function Header({ leave }: HeaderProps) {
   const [roomId, setRoomId] = useState('')
 
   const { createRoom, leaveRoom } = useRoom()
+  const { endConnection } = useWebSocket()
 
   async function createRoomAndCloseModal() {
     setCreateRoomModalOpen(false)
@@ -26,6 +28,7 @@ export default function Header({ leave }: HeaderProps) {
 
   function handleLeaveClick() {
     leaveRoom()
+    endConnection()
     Router.push('/')
   }
 

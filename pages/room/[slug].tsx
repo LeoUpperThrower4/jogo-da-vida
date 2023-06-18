@@ -1,19 +1,18 @@
 import Header from "@/components/Header";
 import { useRoom } from "@/contexts/roomContext";
-import Router, { useRouter } from "next/router";
+import { useWebSocket } from "@/contexts/websocketsContext";
+import Router from "next/router";
 import { useEffect } from "react";
 
 export default function Room() {
-  const { roomId, joinRoom } = useRoom()
-  const router = useRouter()
-  const { slug } = router.query as { slug: string }
+  const { roomId } = useRoom()
+  const { getConnectionForRoom } = useWebSocket()
+
+  const socket = getConnectionForRoom(roomId)
 
   useEffect(() => {
-    if (!roomId) {
-      if (slug) joinRoom(slug)
-      else Router.push('/')
-    }
-  }, [joinRoom, roomId, slug])
+    if (!roomId) Router.push('/')
+  }, [roomId])
 
   return (
     <main>
