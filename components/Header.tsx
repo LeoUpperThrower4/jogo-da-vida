@@ -55,7 +55,7 @@ export default function Header({ leave, gameStarted }: HeaderProps) {
   return (
     <>
       <header className="flex justify-between items-center px-8 py-6 border-b">
-        <Link href="/">Logo</Link>
+        <Link href="/" className="text-2xl font-mono ">O Jogo Da Vida <span className="text-xs">(trabalho de redes usando websockets)</span></Link>
         <div className="flex items-center justify-center gap-2">
           {leave ? (
             <>
