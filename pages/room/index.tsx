@@ -20,7 +20,7 @@ export default function Room() {
   const [myTurn, setMyTurn] = useState(false)
   const [gameStarted, setGameStarted] = useState(false)
   const { addMessage } = useMessages()
-  // isso deve ficar no servidor
+  // TODO: isso deve ficar no servidor
   const [playersPositions, setPlayersPositions] = useState<PlayerPosition[]>([])
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function Room() {
           return playerPosition
         })
         setPlayersPositions(newPlayersPositions)
-      } else if (data.type === 'turn') {
+      } else if (data.type === 'end_turn') {
         setMyTurn(data.userIdCurrentTurn === userId)
       }
     }
