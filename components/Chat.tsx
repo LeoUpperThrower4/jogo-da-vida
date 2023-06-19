@@ -21,7 +21,7 @@ export function Chat() {
   }, [roomId])
 
   return (
-    <div className="max-w-96 flex h-80 flex-col justify-between border-2 border-gray-500 p-2">
+    <div className="max-w-96 flex h-full flex-col justify-between border-2 border-gray-500 p-2">
       <div className="scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex flex-col space-y-4 overflow-y-auto p-3">
         {messages.map((message) => {
           return (

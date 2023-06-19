@@ -6,6 +6,8 @@ interface WebSocketContextValue {
   createConnection: (roomId: string) => WebSocket | null
   setCurrentSocket: (socket: WebSocket) => void
   emitChatMessage: (content: string) => void
+  emitGameStart: () => void
+  emitDiceRoll: () => void
   endConnection: () => void
 }
 
@@ -14,6 +16,8 @@ const WebSocketContext = createContext<WebSocketContextValue>({
   createConnection: () => null,
   setCurrentSocket: () => {},
   emitChatMessage: () => {},
+  emitGameStart: () => {},
+  emitDiceRoll: () => {},
   endConnection: () => {},
 })
 
@@ -46,6 +50,27 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     )
   }
 
+  function emitGameStart() {
+    if (!currentSocket) return
+    currentSocket.send(
+      JSON.stringify({
+        for: 'game',
+        type: 'start_game',
+      })
+    )
+  }
+
+  function emitDiceRoll() {
+    if (!currentSocket) return
+    currentSocket.send(
+      JSON.stringify({
+        for: 'game',
+        type: 'roll_dice',
+        userId
+      })
+    )
+  }
+
   function createConnection(roomId: string): WebSocket | null {
     if (!roomId) return null
     const socket = new WebSocket(`ws://localhost:3333/room/${roomId}`)
@@ -73,6 +98,8 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
         setCurrentSocket,
         createConnection,
         emitChatMessage,
+        emitGameStart,
+        emitDiceRoll,
         endConnection,
       }}
     >

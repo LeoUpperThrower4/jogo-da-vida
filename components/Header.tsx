@@ -7,9 +7,10 @@ import { useWebSocket } from "@/contexts/websocketsContext";
 
 interface HeaderProps {
   leave?: boolean
+  gameStarted?: boolean
 }
 
-export default function Header({ leave }: HeaderProps) {
+export default function Header({ leave, gameStarted }: HeaderProps) {
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false)
   const [createRoomModalOpen, setCreateRoomModalOpen] = useState(false)
 
@@ -17,7 +18,7 @@ export default function Header({ leave }: HeaderProps) {
   const [roomId, setRoomId] = useState('')
 
   const { createRoom, leaveRoom, joinRoom, roomId: currentRoomId } = useRoom()
-  const { endConnection } = useWebSocket()
+  const { endConnection, emitGameStart } = useWebSocket()
 
   async function createRoomAndCloseModal() {
     setCreateRoomModalOpen(false)
@@ -58,12 +59,23 @@ export default function Header({ leave }: HeaderProps) {
         <div className="flex items-center justify-center gap-2">
           {leave ? (
             <>
-              <button className="transition-all p-2 border bg-gray-300 text-gray-900 border-white rounded hover:opacity-70" onClick={handleCopyCodeClick}>
-                Copiar código da sala
-              </button>
               <button className="p-2 border rounded" onClick={handleLeaveClick}>
                 Sair da sala
               </button>
+              {/* Main button: start the game */}
+              {!gameStarted && (
+                <>
+                  <button 
+                    className="transition-all p-2 border bg-gray-300 text-gray-900 border-white rounded hover:opacity-70" 
+                    onClick={handleCopyCodeClick}
+                  >
+                    Copiar código da sala
+                  </button>
+                  <button className="p-2 border rounded bg-indigo-700" onClick={emitGameStart}>
+                    Iniciar jogo
+                  </button>
+                </>
+              )}
             </>
           ) : 
           (
