@@ -3,13 +3,13 @@ import { createContext, useContext, useState } from "react"
 
 interface RoomContextData {
   roomId: string
-  userId: number
+  userId: string
   createRoom: (owner: string) => Promise<CreateRoomResponse> | void
   joinRoom: (username: string, roomId: string) => Promise<boolean> | void
   leaveRoom: () => void
 }
 
-export const RoomContext = createContext<RoomContextData>({createRoom: () => {}, joinRoom: () => {}, leaveRoom: () => {}, roomId: '', userId: -1})
+export const RoomContext = createContext<RoomContextData>({createRoom: () => {}, joinRoom: () => {}, leaveRoom: () => {}, roomId: '', userId: ''})
 
 interface RoomProviderProps {
   children: React.ReactNode
@@ -21,7 +21,7 @@ interface CreateRoomResponse {
 
 export function RoomProvider({children}: RoomProviderProps) {
   const [roomId, setRoomId] = useState('')
-  const [userId, setUserId] = useState(-1)
+  const [userId, setUserId] = useState('')
   
   async function createRoom(owner: string) {
     try {
@@ -29,7 +29,7 @@ export function RoomProvider({children}: RoomProviderProps) {
       if (response.status !== 201) {
         console.log('error creating room')
         setRoomId('')
-        setUserId(-1)
+        setUserId('')
         return
       }
       setRoomId(response.data.roomId)
@@ -46,7 +46,7 @@ export function RoomProvider({children}: RoomProviderProps) {
       if (response.status !== 200) {
         console.log('error joining room')
         setRoomId('')
-        setUserId(-1)
+        setUserId('')
         return false
       }
       setRoomId(roomId)
