@@ -14,11 +14,11 @@ interface WebSocketContextValue {
 const WebSocketContext = createContext<WebSocketContextValue>({
   getConnectionForRoom: () => null,
   createConnection: () => null,
-  setCurrentSocket: () => {},
-  emitChatMessage: () => {},
-  emitGameStart: () => {},
-  emitDiceRoll: () => {},
-  endConnection: () => {},
+  setCurrentSocket: () => { },
+  emitChatMessage: () => { },
+  emitGameStart: () => { },
+  emitDiceRoll: () => { },
+  endConnection: () => { },
 })
 
 interface WebSocketProviderProps {
@@ -27,7 +27,7 @@ interface WebSocketProviderProps {
 
 export function WebSocketProvider({ children }: WebSocketProviderProps) {
   const [currentSocket, setCurrentSocket] = useState<WebSocket | null>(null)
-  const { roomId: currentRoomId, userId } = useRoom()
+  const { leaveRoom, roomId: currentRoomId, userId } = useRoom()
 
   function getConnectionForRoom(roomId: string): WebSocket | null {
     if (!(currentRoomId && roomId)) return null
@@ -45,7 +45,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
         for: 'chat',
         type: 'message',
         content,
-        userId
+        userId,
       })
     )
   }
@@ -78,7 +78,8 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
       console.log('WebSocket connection established')
     }
 
-    socket.onclose = (event) => {
+    socket.onclose = async (event) => {
+      leaveRoom()
       console.log('WebSocket connection closed:', event)
     }
     return socket
