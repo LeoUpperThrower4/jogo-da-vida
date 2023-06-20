@@ -33,7 +33,7 @@ export default function Room() {
   useEffect(() => {
     if (!roomId) Router.push('/')
   }, [roomId])
-  
+
 
   let socket = getConnectionForRoom(roomId)
   if (!socket) {
@@ -41,7 +41,7 @@ export default function Room() {
     if (socket) setCurrentSocket(socket)
   }
   if (!socket) return 'Carregando...'
-  
+
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data)
     if (data.for === 'chat') {
@@ -50,15 +50,16 @@ export default function Room() {
         type: data.type,
         userId: data.userId,
         content: data.content,
+        username: data.username
       })
     } else if (data.for === 'game') {
       if (data.type === 'start_game') {
         setGameStarted(true)
-        setMyTurn (data.userIdCurrentTurn === userId)
+        setMyTurn(data.userIdCurrentTurn === userId)
         const { playersIds } = data
         let initialPlayersPositions: PlayerPosition[] = []
         for (let i = 0; i < playersIds.length; i++) {
-          initialPlayersPositions.push({id: playersIds[i], x: 0, y: 0})
+          initialPlayersPositions.push({ id: playersIds[i], x: 0, y: 0 })
         }
         setPlayersPositions(initialPlayersPositions)
       } else if (data.type === 'roll_dice') {
@@ -82,28 +83,28 @@ export default function Room() {
     emitDiceRoll()
   }
 
-  
+
   function paintPlayer(playerIndex: number) {
     if (playerIndex === 0) return 'bg-blue-500'
     if (playerIndex === 1) return 'bg-red-500'
     if (playerIndex === 2) return 'bg-green-500'
   }
-  
+
   return (
     <>
       <Header leave gameStarted={gameStarted} />
       <main className="grid grid-cols-6 w-full h-full min-h-[24rem]">
         <div className="col-span-4 border">
-        { gameStarted && (
-          <div className="flex items-center p-2 gap-2">
-            <span>Você é:</span> <div className={`w-2 h-2 rounded-full ${paintPlayer(myPlayerIndex)}`}></div>
-          </div>
-        )}
+          {gameStarted && (
+            <div className="flex items-center p-2 gap-2">
+              <span>Você é:</span> <div className={`w-2 h-2 rounded-full ${paintPlayer(myPlayerIndex)}`}></div>
+            </div>
+          )}
           <GameBoard playersPositions={playersPositions} gameStarted={gameStarted} />
           {/* Dice */}
-          { gameStarted && (
+          {gameStarted && (
             <div className={`border-2 border-white bg-gray-500 rounded-full flex justify-center items-center absolute bottom-4 left-4 ${myTurn && 'animate-spin bg-green-300'}`}>
-              <button 
+              <button
                 className={`p-2 text-2xl text-black text-center`}
                 onClick={handleDiceClick}
               >

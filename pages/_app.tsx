@@ -6,12 +6,15 @@ import type { AppProps } from 'next/app'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
+
     <RoomProvider>
       <WebSocketProvider>
+
         <ChatMessagesProvider>
           <Component {...pageProps} />
         </ChatMessagesProvider>
       </WebSocketProvider>
     </RoomProvider>
+
   )
 }

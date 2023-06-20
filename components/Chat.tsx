@@ -9,7 +9,6 @@ export function Chat() {
   const { messages, addMessage } = useMessages()
   const { userId, roomId } = useRoom()
   const { emitChatMessage } = useWebSocket()
-
   function handleSendMessageSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     emitChatMessage(message)
@@ -19,7 +18,7 @@ export function Chat() {
   useEffect(() => {
     if (!roomId) Router.push('/')
   }, [roomId])
-
+  console.log(messages)
   return (
     <div className="max-w-96 flex h-full flex-col justify-between border-2 border-gray-500 p-2">
       <div className="scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex flex-col space-y-4 overflow-y-auto p-3">
@@ -27,10 +26,11 @@ export function Chat() {
           return (
             <React.Fragment key={message.id}>
               {message.type === 'message' ? (
-                
-                (message.userId !== userId ? (
+
+                (message.userId.toString() !== userId ? (
                   <div className="flex items-end">
                     <div className="order-2 mx-2 flex max-w-xs flex-col items-start space-y-2 text-xs">
+                      {message.username}
                       <span className="inline-block rounded-lg rounded-bl-none bg-gray-300 px-4 py-2 text-gray-900">
                         {message.content}
                       </span>
@@ -57,7 +57,7 @@ export function Chat() {
       </div>
 
       <div className="mb-2 border-t-2 border-gray-200 px-4 pt-4 sm:mb-0">
-        <form 
+        <form
           className="relative flex"
           onSubmit={(e) => { handleSendMessageSubmit(e) }}
         >

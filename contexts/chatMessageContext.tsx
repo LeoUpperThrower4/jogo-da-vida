@@ -12,6 +12,7 @@ export type ChatMessage = {
   userId: number
   content: string
   type: string
+  username?: string
 }
 
 type ChatMessagesContextType = {
@@ -21,7 +22,7 @@ type ChatMessagesContextType = {
 
 const ChatMessagesContext = createContext<ChatMessagesContextType>({
   messages: [],
-  addMessage: () => {},
+  addMessage: () => { },
 })
 
 interface ChatMessagesContextProviderProps {
