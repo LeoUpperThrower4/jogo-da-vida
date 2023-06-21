@@ -18,9 +18,8 @@ export function Chat() {
   useEffect(() => {
     if (!roomId) Router.push('/')
   }, [roomId])
-  console.log(messages)
   return (
-    <div className="max-w-96 flex h-full flex-col justify-between border-2 border-gray-500 p-2">
+    <div className="max-w-96 flex h-[90vh] flex-col justify-between  p-4">
       <div className="scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex flex-col space-y-4 overflow-y-auto p-3">
         {messages.map((message) => {
           return (
@@ -31,7 +30,7 @@ export function Chat() {
                   <div className="flex items-end">
                     <div className="order-2 mx-2 flex max-w-xs flex-col items-start space-y-2 text-xs">
                       {message.username}
-                      <span className="inline-block rounded-lg rounded-bl-none bg-gray-300 px-4 py-2 text-gray-900">
+                      <span className="break-all inline-block rounded-lg rounded-bl-none bg-gray-300 px-4 py-2 text-gray-900">
                         {message.content}
                       </span>
                     </div>
@@ -39,7 +38,7 @@ export function Chat() {
                 ) : (
                   <div className="flex items-end justify-end">
                     <div className="order-1 mx-2 flex max-w-xs flex-col items-end space-y-2 text-xs">
-                      <span className="inline-block rounded-lg rounded-br-none bg-blue-600 px-4 py-2 text-white ">
+                      <span className="break-all inline-block rounded-lg rounded-br-none bg-blue-600 px-4 py-2 text-white ">
                         {message.content}
                       </span>
                     </div>

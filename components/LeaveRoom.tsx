@@ -1,6 +1,7 @@
 import { useRoom } from "@/contexts/roomContext";
 import { useWebSocket } from "@/contexts/websocketsContext";
 import Router from "next/router";
+import Button from "./Button";
 
 export default function LeaveRoom() {
   const { leaveRoom } = useRoom()
@@ -11,8 +12,7 @@ export default function LeaveRoom() {
     Router.push('/')
   }
   return (
-    <button className="p-2 border rounded" onClick={handleLeaveClick}>
-      Sair da sala
-    </button>
+    <Button onClick={handleLeaveClick} variant={"tertiary"} type="button">Sair da sala</Button>
+
   )
 }

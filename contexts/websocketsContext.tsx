@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 import { useRoom } from './roomContext'
+import { api } from '@/services/api'
 
 interface WebSocketContextValue {
   getConnectionForRoom: (roomId: string) => WebSocket | null
@@ -73,16 +74,32 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
 
   function createConnection(roomId: string): WebSocket | null {
     if (!roomId) return null
-    const socket = new WebSocket(`ws://localhost:3333/room/${roomId}`)
-    socket.onopen = () => {
-      console.log('WebSocket connection established')
+    console.log('creating connection')
+    try {
+      console.log("tryng")
+      const socket = new WebSocket(`ws://localhost:3333/room/${roomId}`)
+      socket.onopen = () => {
+        console.log('WebSocket connection established')
+      }
+
+
+      socket.onclose = async (event) => {
+        leaveRoom()
+        console.log('WebSocket connection closed:', event)
+      }
+      return socket
+    } catch {
+      console.log('error creating connection')
+      leaveRoom()
+      const cancelConnection = async () => {
+        await api.delete(`/room/${roomId}`)
+      }
+      cancelConnection()
+      return null
+
     }
 
-    socket.onclose = async (event) => {
-      leaveRoom()
-      console.log('WebSocket connection closed:', event)
-    }
-    return socket
+
   }
 
   function endConnection() {
