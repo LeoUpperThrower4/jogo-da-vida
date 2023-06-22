@@ -68,6 +68,7 @@ export default function Room() {
       } else if (data.type === 'roll_dice') {
         setDiceValue(data.diceValue)
       } else if (data.type === 'end_turn') {
+        console.log(data)
         setMyTurn(data.userIdCurrentTurn === userId)
         setPlayersPositions(data.newPlayersPositions.map((playerPosition: BackendPlayerPosition) => {
           return {

@@ -12,6 +12,7 @@ interface WebSocketContextValue {
   endConnection: () => void
 }
 
+
 const WebSocketContext = createContext<WebSocketContextValue>({
   getConnectionForRoom: () => null,
   createConnection: () => null,
@@ -73,6 +74,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
   }
 
   function createConnection(roomId: string): WebSocket | null {
+    console.log('createConnection')
     if (!roomId) return null
     console.log('creating connection')
     try {
@@ -98,8 +100,6 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
       return null
 
     }
-
-
   }
 
   function endConnection() {

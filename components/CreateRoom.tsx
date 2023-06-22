@@ -38,7 +38,8 @@ export default function CreateRoom() {
     if (newRoom === true) Router.push(`/room`)
     else alert(newRoom)
   }
-  const fields = [{ name: 'username', label: 'Nome de usuário', type: 'string', placeholder: 'Rafael' }]
+
+  const fields = [{ name: 'username', label: 'Nome de usuário', type: 'string', placeholder: 'Seu nome' }]
 
   return (
     <>

@@ -25,7 +25,6 @@ export default function JoinRoom() {
   function closeModal() {
     setIsOpen(false)
   }
-
   function openModal() {
     setIsOpen(true)
   }
@@ -43,6 +42,7 @@ export default function JoinRoom() {
     if (joinedRoom === true) Router.push(`/room`)
     else alert(joinedRoom)
   }
+
   const fields = [{ name: 'username', label: 'Nome de usuário', type: 'string', placeholder: 'Rafael' }, { name: 'roomId', label: 'Id da sala', type: 'string', placeholder: '5fb1b384-8745-4a7e-8f53-c4603b29b7da' }]
 
   return (
