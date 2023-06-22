@@ -16,7 +16,7 @@ function paintPlayer(playerIndex: number) {
 
 export default function Board({ playersPositions }: BoardProps) {
   const boardData = [
-    ['INICIO', 'PERDE_100', '', '', 'VOLTA_2'],
+    ['INICIO', 'VOLTA_', '', '', 'VOLTA_2'],
     ['', 'SORTE_REVES', 'GANHA_100', '', 'AVANCA_1'],
     ['', '', 'SORTE_REVES', 'PERDE_100', ''],
     ['VOLTA_1', 'PERDE_100', '', 'SORTE_REVES', 'SORTE_REVES'],
@@ -33,13 +33,14 @@ export default function Board({ playersPositions }: BoardProps) {
                 {playersPositions.map((playerPosition, playerIndex) => {
                   if (playerPosition.x === cellIndex && playerPosition.y === rowIndex) {
                     return (<div key={playerIndex} className={`w-2 h-2 rounded-full ${paintPlayer(playerIndex)}`} />)
-                  }})
+                  }
+                })
                 }
                 {boardData[rowIndex][cellIndex]}
               </div>
             ))}
           </div>
-          ))}
+        ))}
       </div>
     </>
   )

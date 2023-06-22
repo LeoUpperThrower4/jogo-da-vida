@@ -1,13 +1,11 @@
 import { useRoom } from "@/contexts/roomContext";
 import { useWebSocket } from "@/contexts/websocketsContext";
+import Button from "./Button";
 
 export default function StartGame() {
-  const { roomId: currentRoomId } = useRoom()
   const { emitGameStart } = useWebSocket()
 
   return (
-    <button className="p-2 border rounded bg-indigo-700" onClick={emitGameStart}>
-      Iniciar jogo
-    </button>
+    <Button onClick={emitGameStart} variant={"primary"} type="button">Iniciar jogo</Button>
   )
 }

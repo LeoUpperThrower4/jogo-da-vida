@@ -32,14 +32,17 @@ export default function Room() {
 
   useEffect(() => {
     if (!roomId) Router.push('/')
-  }, [roomId])
+    let socket = getConnectionForRoom(roomId)
+    console.log(socket)
+    if (socket === null) {
+      socket = createConnection(roomId)
+      console.log('Crating socket socket')
+      if (socket) setCurrentSocket(socket)
+    }
+  }, [roomId, getConnectionForRoom, createConnection, setCurrentSocket])
 
 
   let socket = getConnectionForRoom(roomId)
-  if (!socket) {
-    socket = createConnection(roomId)
-    if (socket) setCurrentSocket(socket)
-  }
   if (!socket) return 'Carregando...'
 
   socket.onmessage = (event) => {
@@ -65,6 +68,7 @@ export default function Room() {
       } else if (data.type === 'roll_dice') {
         setDiceValue(data.diceValue)
       } else if (data.type === 'end_turn') {
+        console.log(data)
         setMyTurn(data.userIdCurrentTurn === userId)
         setPlayersPositions(data.newPlayersPositions.map((playerPosition: BackendPlayerPosition) => {
           return {
@@ -89,7 +93,6 @@ export default function Room() {
     if (playerIndex === 1) return 'bg-red-500'
     if (playerIndex === 2) return 'bg-green-500'
   }
-
   return (
     <>
       <Header leave gameStarted={gameStarted} />

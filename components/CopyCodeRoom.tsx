@@ -1,4 +1,5 @@
 import { useRoom } from "@/contexts/roomContext";
+import Button from "./Button";
 
 export default function CopyCodeRoom() {
   const { roomId: currentRoomId } = useRoom()
@@ -16,11 +17,8 @@ export default function CopyCodeRoom() {
   }
 
   return (
-    <button
-      className="transition-all p-2 border bg-gray-300 text-gray-900 border-white rounded hover:opacity-70"
-      onClick={handleCopyCodeClick}
-    >
-      Copiar código da sala
-    </button>
+
+
+    <Button onClick={handleCopyCodeClick} variant={"secondary"} type="button">Copiar código da sala</Button>
   )
 }

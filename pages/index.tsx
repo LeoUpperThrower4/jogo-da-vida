@@ -1,17 +1,16 @@
 import Header from "@/components/Header";
+import Home from "@/components/Home";
+
 import Head from "next/head";
 
-export default function Home() {
+export default function Index() {
   return (
     <>
-
       <Head>
-        <title>Jogo da Vida</title>
+        <title>Corrida no Tabuleiro</title>
       </Head>
-      <main>
-        <Header />
-        Explicação do jogo
-      </main>
+      <Header />
+      <Home />
     </>
   )
 }
