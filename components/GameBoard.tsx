@@ -1,3 +1,5 @@
+import React from "react"
+
 interface PlayerPosition {
   id: string
   x: number
@@ -16,32 +18,40 @@ function paintPlayer(playerIndex: number) {
 
 export default function Board({ playersPositions }: BoardProps) {
   const boardData = [
-    ['INICIO', 'VOLTA_', '', '', 'VOLTA_2'],
-    ['', 'SORTE_REVES', 'GANHA_100', '', 'AVANCA_1'],
-    ['', '', 'SORTE_REVES', 'PERDE_100', ''],
-    ['VOLTA_1', 'PERDE_100', '', 'SORTE_REVES', 'SORTE_REVES'],
-    ['', '', 'PERDE_100', 'VOLTA_1', 'FIM'],
+    ['INICIO', 'VOLTA 1', 'AVANCA 5', '', 'VOLTA 2'],
+    ['', 'SORTE OU REVÉS', 'VOLTA 10', '', 'AVANCA 1'],
+    ['', '', 'SORTE OU REVÉS', 'AVANCA 1', ''],
+    ['VOLTA 1', 'AVANCA 2', '', 'SORTE OU REVÉS', 'SORTE OU REVÉS'],
+    ['', '', 'AVANCA 1', 'VOLTA 10', 'FIM'],
   ]
 
   return (
-    <>
-      <div className="grid grid-cols-5 h-full w-full">
-        {boardData.map((row, rowIndex) => (
-          <div key={rowIndex} className="grid grid-rows-5">
-            {row.map((cell, cellIndex) => (
-              <div key={cellIndex} className="flex items-center justify-center border">
-                {playersPositions.map((playerPosition, playerIndex) => {
-                  if (playerPosition.x === cellIndex && playerPosition.y === rowIndex) {
-                    return (<div key={playerIndex} className={`w-2 h-2 rounded-full ${paintPlayer(playerIndex)}`} />)
-                  }
-                })
+    <div className="grid grid-cols-5 grid-rows-5 h-full w-full">
+      {boardData.map((row, rowIndex) => (
+        <React.Fragment key={rowIndex}>
+          {row.map((cell, cellIndex) => (
+            <div 
+              key={cellIndex}
+              className="flex justify-center items-center border border-gray-500 gap-2 text-center p-2"
+            >
+              {playersPositions.map((player, playerIndex) => {
+                if (player.x === cellIndex && player.y === rowIndex) {
+                  return (
+                    <div
+                      key={playerIndex}
+                      className={`w-2 h-2 rounded-full ${paintPlayer(
+                        playerIndex
+                      )}`}
+                    />
+                  )
                 }
-                {boardData[rowIndex][cellIndex]}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </>
+                return null; // Add a return statement for non-matching conditions
+              })}
+              {cell}
+            </div>
+          ))}
+        </React.Fragment>
+      ))}
+    </div>
   )
 }

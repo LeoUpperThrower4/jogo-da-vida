@@ -22,7 +22,7 @@ interface PlayerPosition {
 
 export default function Room() {
   const { roomId, userId } = useRoom()
-  const { getConnectionForRoom, createConnection, setCurrentSocket, emitDiceRoll } = useWebSocket()
+  const { getConnectionForRoom, createConnection, setCurrentSocket, emitDiceRoll, endConnection } = useWebSocket()
   const [diceValue, setDiceValue] = useState(-1)
   const [myTurn, setMyTurn] = useState(false)
   const [gameStarted, setGameStarted] = useState(false)
@@ -78,6 +78,13 @@ export default function Room() {
           }
         }
         ))
+      } else if (data.type === 'end_game') {
+        setGameStarted(false)
+        setMyTurn(false)
+        setPlayersPositions([])
+        endConnection()
+        if (data.winnerId === userId) alert('Você ganhou!')
+        else alert('Você perdeu!')
       }
     }
   }
@@ -103,7 +110,7 @@ export default function Room() {
               <span>Você é:</span> <div className={`w-2 h-2 rounded-full ${paintPlayer(myPlayerIndex)}`}></div>
             </div>
           )}
-          <GameBoard playersPositions={playersPositions} gameStarted={gameStarted} />
+          <GameBoard playersPositions={playersPositions} />
           {/* Dice */}
           {gameStarted && (
             <div className={`border-2 border-white bg-gray-500 rounded-full flex justify-center items-center absolute bottom-4 left-4 ${myTurn && 'animate-spin bg-green-300'}`}>
