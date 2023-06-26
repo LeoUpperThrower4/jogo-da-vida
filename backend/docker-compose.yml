@@ -1,0 +1,12 @@
+version: '3'
+services:
+  redes:
+    image: bitnami/postgresql:latest
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=redes
+    ports:
+      - 5432:5432
+
+# docker run --name redes -e POSTGRESQL_USERNAME=docker -e POSTGRESQL_PASSWORD=docker -e POSTGRESQL_DATABASE=redes -p 5432:5432 bitnami/postgresql
