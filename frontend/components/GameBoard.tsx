@@ -10,6 +10,7 @@ interface BoardProps {
   playersPositions: PlayerPosition[]
 }
 
+// Função que pinta o jogador de acordo com o seu index
 function paintPlayer(playerIndex: number) {
   if (playerIndex === 0) return 'bg-blue-500'
   if (playerIndex === 1) return 'bg-red-500'
@@ -17,6 +18,7 @@ function paintPlayer(playerIndex: number) {
 }
 
 export default function Board({ playersPositions }: BoardProps) {
+  // Estrutura do tabuleiro
   const boardData = [
     ['INICIO', 'VOLTA 1', 'AVANCA 5', '', 'VOLTA 2'],
     ['', 'VOLTA 3', 'VOLTA 10', '', 'AVANCA 1'],
@@ -27,6 +29,7 @@ export default function Board({ playersPositions }: BoardProps) {
 
   return (
     <div className="grid grid-cols-5 grid-rows-5 h-[80vh] w-full">
+      {/* através de maps aninhados fazemos o desenho do tabuleiro na tela */}
       {boardData.map((row, rowIndex) => (
         <React.Fragment key={rowIndex}>
           {row.map((cell, cellIndex) => (
@@ -45,7 +48,7 @@ export default function Board({ playersPositions }: BoardProps) {
                     />
                   )
                 }
-                return null; // Add a return statement for non-matching conditions
+                return null;
               })}
               {cell}
             </div>

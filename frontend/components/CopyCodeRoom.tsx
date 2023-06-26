@@ -1,6 +1,6 @@
 import { useRoom } from "@/contexts/roomContext";
 import Button from "./Button";
-
+// Componente simples que copia o código da sala para a área de transferência com intuito de facilitar
 export default function CopyCodeRoom() {
   const { roomId: currentRoomId } = useRoom()
 

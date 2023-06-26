@@ -4,10 +4,14 @@ import { useWebSocket } from '@/contexts/websocketsContext'
 import Router from 'next/router'
 import React, { useEffect, useState } from 'react'
 
+// Componente do Chat. Responsável pela conversa entre os integrante do grupo
 export function Chat() {
   const [message, setMessage] = useState('')
-  const { messages, addMessage } = useMessages()
+  // Através do hook useMessages compartilhamos as informações de mensagens entre todos os componentes
+  const { messages } = useMessages()
+  // Através desse hook compartilhamos as informações de usuário e sala entre todos os componentes
   const { userId, roomId } = useRoom()
+  // Esse hook é responsável por enviar as mensagens para o servidor através do socket atual
   const { emitChatMessage } = useWebSocket()
   function handleSendMessageSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -21,11 +25,13 @@ export function Chat() {
   return (
     <div className="max-w-96 flex h-[90vh] flex-col justify-between  border-x-2 p-4">
       <div className="scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex flex-col space-y-4 overflow-y-auto p-3">
+        {/* fazemos um loop em todas as mensagens da lista e mostramos elas na tela formatando-as como necessário */}
         {messages.map((message) => {
           return (
             <React.Fragment key={message.id}>
               {message.type === 'message' ? (
-
+                // Por exemplo, se o que enviou a mensagem for diferente do usuário atual, mostramos a mensagem do outro usuário a esquerda
+                // Senão, mostramos a mensagem do usuário atual a direita
                 (message.userId.toString() !== userId ? (
                   <div className="flex items-end">
                     <div className="order-2 mx-2 flex max-w-xs flex-col items-start space-y-2 text-xs">
