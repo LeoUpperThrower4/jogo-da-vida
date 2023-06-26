@@ -4,8 +4,7 @@ generator client {
 
 // Devido ao erro de acesso simultaneo é necessário usar postgresql para que multiplas salas executem simultaneamente
 datasource db {
-  provider = "sqlite"
-  // provider = "postgresql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

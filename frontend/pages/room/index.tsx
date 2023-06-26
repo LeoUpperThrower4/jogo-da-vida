@@ -21,13 +21,24 @@ interface PlayerPosition {
 }
 
 export default function Room() {
-  const { roomId, userId } = useRoom()
+  const { roomId, userId, } = useRoom()
   const { getConnectionForRoom, createConnection, setCurrentSocket, emitDiceRoll, endConnection } = useWebSocket()
   const [diceValue, setDiceValue] = useState(-1)
   const [myTurn, setMyTurn] = useState(false)
   const [gameStarted, setGameStarted] = useState(false)
   const { addMessage } = useMessages()
   const [playersPositions, setPlayersPositions] = useState<PlayerPosition[]>([])
+  // const [myPlayerIndex, setMyPlayerIndex] = useState<number>(0)
+  // const [indexSet, setIndexSet] = useState<boolean>(false)
+
+
+  // useEffect(() => {
+  //   if (indexSet === false && playersPositions.length !== 0) {
+  //     setMyPlayerIndex(playersPositions.findIndex(player => player.id === userId))
+  //     setIndexSet(true)
+  //   }
+
+  // }, [playersPositions, gameStarted, userId, indexSet])
   const myPlayerIndex = playersPositions.findIndex(player => player.id === userId)
 
   useEffect(() => {
@@ -94,12 +105,15 @@ export default function Room() {
     emitDiceRoll()
   }
 
-
   function paintPlayer(playerIndex: number) {
     if (playerIndex === 0) return 'bg-blue-500'
     if (playerIndex === 1) return 'bg-red-500'
     if (playerIndex === 2) return 'bg-green-500'
+    if (playerIndex === 3) return 'bg-yellow-500'
+    if (playerIndex === 4) return 'bg-white'
+    if (playerIndex === 5) return 'bg-orange-500'
   }
+
   return (
     <>
       <Header leave gameStarted={gameStarted} />

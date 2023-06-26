@@ -78,7 +78,7 @@ export async function roomsRoutes(app: FastifyInstance) {
         reply.status(404).send({ message: 'Sala não encontrada' })
         return
       }
-      if (room.players.length === 3) {
+      if (room.players.length === 6) {
         reply.status(400).send({ message: 'Sala Cheia' })
         return
       }

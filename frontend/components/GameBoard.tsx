@@ -15,6 +15,9 @@ function paintPlayer(playerIndex: number) {
   if (playerIndex === 0) return 'bg-blue-500'
   if (playerIndex === 1) return 'bg-red-500'
   if (playerIndex === 2) return 'bg-green-500'
+  if (playerIndex === 3) return 'bg-yellow-500'
+  if (playerIndex === 4) return 'bg-white'
+  if (playerIndex === 5) return 'bg-orange-500'
 }
 
 export default function Board({ playersPositions }: BoardProps) {

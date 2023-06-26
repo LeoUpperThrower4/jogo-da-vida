@@ -50,8 +50,8 @@ export async function socketsRoutes(app: FastifyInstance) {
         )
         return
       }
-      // Verifica o limite máximo da sala, se já existirem 3 jogadores, fecha a conexão
-      if (room.players.length > 3) {
+      // Verifica o limite máximo da sala, se já existirem 6 jogadores, fecha a conexão
+      if (room.players.length > 6) {
         console.log(room.players.length)
         connection.socket.close(
           1000,
@@ -312,6 +312,18 @@ export async function socketsRoutes(app: FastifyInstance) {
                 })
               } else {
                 // A sala é atualizada, indicando que o antigo usuário, saiu da sala
+                const hasPosition = await prisma.positionPlayer.findFirst({
+                  where: {
+                    playerId: userId,
+                  },
+                })
+                if (hasPosition) {
+                  await prisma.positionPlayer.delete({
+                    where: {
+                      playerId: userId,
+                    },
+                  })
+                }
                 const existRoom = await prisma.room.findUnique({
                   where: {
                     id: roomId,
@@ -330,18 +342,6 @@ export async function socketsRoutes(app: FastifyInstance) {
                       },
                     },
                   })
-                  const hasPosition = await prisma.positionPlayer.findFirst({
-                    where: {
-                      playerId: userId,
-                    },
-                  })
-                  if (hasPosition) {
-                    await prisma.positionPlayer.delete({
-                      where: {
-                        playerId: userId,
-                      },
-                    })
-                  }
 
                   // Para cada usuário na sala é enviada uma mensagem indicando que o usuário saiu
                   roomSet.forEach((socket) => {
@@ -366,6 +366,9 @@ export async function socketsRoutes(app: FastifyInstance) {
                       },
                       include: { positions: true },
                     })
+                    if (roomPositions?.hostId === userId) {
+                      return
+                    }
                     // Seleciona o novo jogador a jogar o dado
                     const currentUserIndex = roomSet.findIndex(
                       (socket) => socket.userId === userId,
