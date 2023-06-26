@@ -1,8 +1,8 @@
 const boardData = [
   ['INICIO', 'VOLTA_1', 'AVANCA_5', '', 'VOLTA_2'],
-  ['', 'SORTEREVES_3', 'VOLTA_10', '', 'AVANCA_1'],
-  ['', '', 'SORTEREVES_5', 'AVANCA_1', ''],
-  ['VOLTA_1', 'AVANCA_2', '', 'SORTEREVES_2', 'SORTEREVES_1'],
+  ['', 'VOLTA_3', 'VOLTA_10', '', 'AVANCA_1'],
+  ['', '', 'AVANCA_5', 'AVANCA_1', ''],
+  ['VOLTA_1', 'AVANCA_2', '', 'AVANCA_2', 'VOLTA_2'],
   ['', '', 'AVANCA_1', 'VOLTA_10', 'FIM'],
 ]
 
@@ -63,12 +63,6 @@ export function getNewXY(
     case 'VOLTA':
       console.log('Volta')
       resultXY = getSub(actionValue, newX, newY)
-      break
-    case 'SORTEREVES':
-      console.log('Sorte ou Revés')
-      if (Math.floor(Math.random() * 2) === 1)
-        resultXY = getSum(actionValue, newX, newY)
-      else resultXY = getSub(actionValue, newX, newY)
       break
     default:
       resultXY = { outX: newX, outY: newY }

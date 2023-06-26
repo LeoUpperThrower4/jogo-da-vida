@@ -19,9 +19,9 @@ function paintPlayer(playerIndex: number) {
 export default function Board({ playersPositions }: BoardProps) {
   const boardData = [
     ['INICIO', 'VOLTA 1', 'AVANCA 5', '', 'VOLTA 2'],
-    ['', 'SORTE OU REVÉS', 'VOLTA 10', '', 'AVANCA 1'],
-    ['', '', 'SORTE OU REVÉS', 'AVANCA 1', ''],
-    ['VOLTA 1', 'AVANCA 2', '', 'SORTE OU REVÉS', 'SORTE OU REVÉS'],
+    ['', 'VOLTA 3', 'VOLTA 10', '', 'AVANCA 1'],
+    ['', '', 'AVANCA 5', 'AVANCA 1', ''],
+    ['VOLTA 1', 'AVANCA 2', '', 'AVANCA 2', 'VOLTA 2'],
     ['', '', 'AVANCA 1', 'VOLTA 10', 'FIM'],
   ]
 
