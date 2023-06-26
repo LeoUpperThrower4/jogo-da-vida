@@ -2,6 +2,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Devido ao erro de acesso simultaneo é necessário usar postgresql para que multiplas salas executem simultaneamente
 datasource db {
   provider = "sqlite"
   // provider = "postgresql"

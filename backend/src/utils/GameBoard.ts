@@ -1,3 +1,4 @@
+// Variável que representa o tabuleiro
 const boardData = [
   ['INICIO', 'VOLTA_1', 'AVANCA_5', '', 'VOLTA_2'],
   ['', 'VOLTA_3', 'VOLTA_10', '', 'AVANCA_1'],
@@ -6,6 +7,7 @@ const boardData = [
   ['', '', 'AVANCA_1', 'VOLTA_10', 'FIM'],
 ]
 
+// Funções usadas para calcular as novas posições após lançamentos de dados e ou alterações no tabuleiro
 function getSum(actionValue: string, x: number, y: number) {
   let outX = x + parseInt(actionValue)
   let outY = y
