@@ -19,7 +19,7 @@ export function Chat() {
     if (!roomId) Router.push('/')
   }, [roomId])
   return (
-    <div className="max-w-96 flex h-[90vh] flex-col justify-between  p-4">
+    <div className="max-w-96 flex h-[90vh] flex-col justify-between  border-x-2 p-4">
       <div className="scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch flex flex-col space-y-4 overflow-y-auto p-3">
         {messages.map((message) => {
           return (

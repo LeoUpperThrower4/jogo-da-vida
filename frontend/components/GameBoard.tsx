@@ -26,11 +26,11 @@ export default function Board({ playersPositions }: BoardProps) {
   ]
 
   return (
-    <div className="grid grid-cols-5 grid-rows-5 h-full w-full">
+    <div className="grid grid-cols-5 grid-rows-5 h-[80vh] w-full">
       {boardData.map((row, rowIndex) => (
         <React.Fragment key={rowIndex}>
           {row.map((cell, cellIndex) => (
-            <div 
+            <div
               key={cellIndex}
               className="flex justify-center items-center border border-gray-500 gap-2 text-center p-2"
             >
