@@ -9,4 +9,5 @@ services:
     ports:
       - 5432:5432
 
+# Linha de comando que o docker compose executa
 # docker run --name redes -e POSTGRESQL_USERNAME=docker -e POSTGRESQL_PASSWORD=docker -e POSTGRESQL_DATABASE=redes -p 5432:5432 bitnami/postgresql
