@@ -283,12 +283,16 @@ export async function socketsRoutes(app: FastifyInstance) {
             if (socket.connection === connection.socket) {
               const userId = socket.userId
               // É feita a retirada do usuário atual da lista de sockets e do banco
-              roomSet.splice(roomSet.indexOf(socket), 1)
-              await prisma.user.delete({
-                where: {
-                  id: userId,
-                },
-              })
+              try {
+                roomSet.splice(roomSet.indexOf(socket), 1)
+                await prisma.user.delete({
+                  where: {
+                    id: userId,
+                  },
+                })
+              } catch (error) {
+                console.log('Error deleting user: ', error)
+              }
               // Verifica-se se o usuário era o host
               const Host = await prisma.room.findFirst({
                 where: {

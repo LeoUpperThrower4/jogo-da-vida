@@ -33,8 +33,10 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
 
   function getConnectionForRoom(roomId: string): WebSocket | null {
     if (!(currentRoomId && roomId)) return null
-    if (roomId === currentRoomId && currentSocket) {
-      return currentSocket
+    if ((roomId === currentRoomId) && currentSocket) {
+      const socketRoomId = currentSocket.url.split('/').pop()
+      if (socketRoomId === roomId) return currentSocket
+      else return null
     } else {
       return null
     }
@@ -78,12 +80,10 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     if (!roomId) return null
     console.log('creating connection')
     try {
-      console.log("tryng")
       const socket = new WebSocket(`ws://localhost:3333/room/${roomId}`)
       socket.onopen = () => {
         console.log('WebSocket connection established')
       }
-
 
       socket.onclose = async (event) => {
         leaveRoom()
@@ -98,7 +98,6 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
       }
       cancelConnection()
       return null
-
     }
   }
 

@@ -17,7 +17,6 @@ export async function roomsRoutes(app: FastifyInstance) {
     })
 
     // Criando usuário no banco
-    console.log('usuário Criado')
     const { username } = bodySchema.parse(request.body)
     const user = await prisma.user.create({
       data: {
@@ -25,7 +24,6 @@ export async function roomsRoutes(app: FastifyInstance) {
       },
     })
     // Criando sala no banco
-    console.log('Sala Criada')
     const room = await prisma.room.create({
       data: {
         players: {
@@ -47,13 +45,12 @@ export async function roomsRoutes(app: FastifyInstance) {
     // Adicionando a resposta o cookie
     reply.setCookie('token', token, {
       path: '/',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
       httpOnly: true,
       secure: false,
     })
 
     // Enviando a resposta com os id's criados
-    console.log('response enviada')
     reply.code(201).send({ roomId: room.id, userId: user.id })
   })
   // Rota de adição de usuário a sala, assim como criação de usuário
