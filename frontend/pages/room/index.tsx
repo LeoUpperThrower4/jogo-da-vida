@@ -104,7 +104,7 @@ export default function Room() {
     <>
       <Header leave gameStarted={gameStarted} />
       <main className="grid grid-cols-6 w-full h-full min-h-[24rem]">
-        <div className="col-span-4 border">
+        <div className=" pt-2 col-span-4">
           {gameStarted && (
             <div className="flex items-center p-2 gap-2">
               <span>Você é:</span> <div className={`w-2 h-2 rounded-full ${paintPlayer(myPlayerIndex)}`}></div>
