@@ -48,6 +48,15 @@ module.exports = {
           900: '#025929',
         },
       },
+      keyframes: {
+        'float': {
+          '0%, 100%': { transform: 'translateY(-5%)' },
+          '50%': { transform: 'none' }
+        }
+      },
+      animation: {
+        'float': 'float 3s ease-in-out infinite'
+      }
     },
   },
   plugins: [],
