@@ -5,6 +5,14 @@ import { env } from 'process'
 import { randomUUID } from 'crypto'
 import { getNewXY } from '../utils/GameBoard'
 
+function getNextPlayer(roomSet: Array<any>, currentUserIndex: number) {
+  // calcula o novo jogador do dado
+  const nextUserIndex =
+    currentUserIndex + 1 >= roomSet.length ? 0 : currentUserIndex + 1
+
+  return roomSet[nextUserIndex].userId
+}
+
 // Registro de Conexões por salas
 const roomConnections: Map<string, Array<any>> = new Map()
 
@@ -18,13 +26,13 @@ export async function socketsRoutes(app: FastifyInstance) {
       const token = req.cookies.token ?? null
       const { sub } = token ? jwt.verify(token, env.JWT_SECRET!) : { sub: null }
       // Verifica se o usuário realmente existe
-      const userExist = await prisma.user.count({
+      const user = await prisma.user.findUnique({
         where: {
           id: sub?.toString(),
         },
       })
       // Caso não haja usuário, a conexão é cancelada
-      if (userExist === 0) {
+      if (!user) {
         connection.socket.close(
           1000,
           'Conexão encerrada pelo servidor. Usuário não existe',
@@ -73,7 +81,8 @@ export async function socketsRoutes(app: FastifyInstance) {
             for: 'chat',
             type: 'join',
             userId: sub,
-            content: `has join the room.`,
+            username: user.name,
+            content: 'entrou na sala',
           }
           socket.connection.send(JSON.stringify(message))
         })
@@ -83,18 +92,19 @@ export async function socketsRoutes(app: FastifyInstance) {
       connection.socket.on('message', async (data) => {
         // Transforma a informação em json
         const message = JSON.parse(data)
-
+        // Lista com todas as conexões da sala
+        const roomSet = roomConnections.get(roomId)
+        // Procura no banco o usuário que enviou a mensagem
+        const username = await prisma.user.findFirst({
+          where: {
+            id: message.userId,
+          },
+        })
+        console.log(`userId: ${message.userId}; username: ${username?.name}`)
         // Verifica se é chat ou jogo
         if (message.for === 'chat') {
-          // Chat reenvia a mensagem para todas as conexões ativas da sala
-          const roomSet = roomConnections.get(roomId)
           if (roomSet) {
             // Procura o nome do usuário para usar no chat
-            const username = await prisma.user.findFirst({
-              where: {
-                id: message.userId,
-              },
-            })
             // Envia a mensagem para todos
             roomSet.forEach((socket) => {
               const newMessage = JSON.stringify({
@@ -106,7 +116,6 @@ export async function socketsRoutes(app: FastifyInstance) {
             })
           }
         } else if (message.for === 'game') {
-          const roomSet = roomConnections.get(roomId)
           if (roomSet) {
             // Verificações de type de mensagem
             if (message.type === 'start_game') {
@@ -209,11 +218,6 @@ export async function socketsRoutes(app: FastifyInstance) {
                     playerPosition.positionX === 4 &&
                     playerPosition.positionY === 4,
                 )
-                const username = await prisma.user.findFirst({
-                  where: {
-                    id: message.userId,
-                  },
-                })
                 if (finalPosition) {
                   // Envia mensagem para todos os jogadores que o jogo acabou
                   console.log(
@@ -232,26 +236,21 @@ export async function socketsRoutes(app: FastifyInstance) {
                   return
                 }
 
-                // calcula o novo jogador do dado
-                const nextUserIndex =
-                  currentUserIndex + 1 >= roomSet.length
-                    ? 0
-                    : currentUserIndex + 1
-
-                const nextUserId = roomSet[nextUserIndex].userId
                 // Atualiza a sala com o novo jogador do dado
                 await prisma.room.update({
                   where: {
                     id: roomId,
                   },
                   data: {
-                    currentTurnPlayerId: nextUserId,
+                    currentTurnPlayerId: getNextPlayer(
+                      roomSet,
+                      currentUserIndex,
+                    ),
                   },
                 })
 
-                // Envia o valor do dado para todos os jogadores  e indica que o turno acabou
+                // Envia o valor do dado para todos os jogadores e indica que o turno acabou
                 // retornando as novas posições e o novo jogador a jogar
-
                 roomSet.forEach((socket) => {
                   socket.connection.send(
                     JSON.stringify({
@@ -266,7 +265,10 @@ export async function socketsRoutes(app: FastifyInstance) {
                     JSON.stringify({
                       for: 'game',
                       type: 'end_turn',
-                      userIdCurrentTurn: nextUserId,
+                      userIdCurrentTurn: getNextPlayer(
+                        roomSet,
+                        currentUserIndex,
+                      ),
                       newPlayersPositions,
                     }),
                   )
@@ -357,7 +359,8 @@ export async function socketsRoutes(app: FastifyInstance) {
                       for: 'chat',
                       type: 'exit',
                       userId,
-                      content: `has left the room.`,
+                      username: user.name,
+                      content: `saiu da sala`,
                     }
                     socket.connection.send(JSON.stringify(message))
                   })
@@ -399,7 +402,10 @@ export async function socketsRoutes(app: FastifyInstance) {
                           JSON.stringify({
                             for: 'game',
                             type: 'end_turn',
-                            userIdCurrentTurn: nextUserId,
+                            userIdCurrentTurn: getNextPlayer(
+                              roomSet,
+                              currentUserIndex,
+                            ),
                             newPlayersPositions,
                           }),
                         )

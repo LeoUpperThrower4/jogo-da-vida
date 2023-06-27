@@ -23,24 +23,13 @@ interface PlayerPosition {
 }
 
 export default function Room() {
-  const { roomId, userId, } = useRoom()
+  const { roomId, userId } = useRoom()
   const { getConnectionForRoom, createConnection, setCurrentSocket, emitDiceRoll, endConnection } = useWebSocket()
   const [diceValue, setDiceValue] = useState(-1)
   const [myTurn, setMyTurn] = useState(false)
   const [gameStarted, setGameStarted] = useState(false)
   const { addMessage } = useMessages()
   const [playersPositions, setPlayersPositions] = useState<PlayerPosition[]>([])
-  // const [myPlayerIndex, setMyPlayerIndex] = useState<number>(0)
-  // const [indexSet, setIndexSet] = useState<boolean>(false)
-
-
-  // useEffect(() => {
-  //   if (indexSet === false && playersPositions.length !== 0) {
-  //     setMyPlayerIndex(playersPositions.findIndex(player => player.id === userId))
-  //     setIndexSet(true)
-  //   }
-
-  // }, [playersPositions, gameStarted, userId, indexSet])
   const myPlayerIndex = playersPositions.findIndex(player => player.id === userId)
 
   useEffect(() => {
@@ -79,8 +68,6 @@ export default function Room() {
         }
         setPlayersPositions(initialPlayersPositions)
       } else if (data.type === 'roll_dice') {
-
-
         if (data.userId === userId) {
           toast(`🎲 Você tirou ${data.diceValue}!`, {
             position: "top-right",
@@ -106,7 +93,6 @@ export default function Room() {
           });
         }
       } else if (data.type === 'end_turn') {
-
         setMyTurn(data.userIdCurrentTurn === userId)
         setPlayersPositions(data.newPlayersPositions.map((playerPosition: BackendPlayerPosition) => {
           return {

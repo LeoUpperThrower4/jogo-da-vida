@@ -9,7 +9,7 @@ import { useRoom } from './roomContext'
 
 export type ChatMessage = {
   id: number
-  userId: number
+  userId: string
   content: string
   type: string
   username?: string

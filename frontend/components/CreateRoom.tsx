@@ -33,7 +33,7 @@ export default function CreateRoom() {
 
   async function handleCreateRoom(data: CreateRoomFormData) {
     const { username } = data
-    const newRoom = await createRoom(username) // aqui chamamos a função createRoom do hook useRoom, a qual faz uma requisição para o backend e cria a sala
+    const newRoom = await createRoom(username) // aqui chamamos a função createRoom do hook useRoom que faz uma requisição para o backend e cria a sala
     closeModal()
     if (newRoom === true) Router.push(`/room`)
     else alert('Erro ao criar a sala. Reinicie a página e tente novamente.')
