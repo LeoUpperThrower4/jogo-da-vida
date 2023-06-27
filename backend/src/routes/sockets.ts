@@ -373,11 +373,6 @@ export async function socketsRoutes(app: FastifyInstance) {
                     const currentUserIndex = roomSet.findIndex(
                       (socket) => socket.userId === userId,
                     )
-                    const nextUserIndex =
-                      currentUserIndex + 1 >= roomSet.length
-                        ? 0
-                        : currentUserIndex + 1
-                    const nextUserId = roomSet[nextUserIndex].userId
 
                     // Atualiza a sala indicando a saída do player
                     if (roomPositions) {
@@ -387,7 +382,8 @@ export async function socketsRoutes(app: FastifyInstance) {
                           id: roomId,
                         },
                         data: {
-                          currentTurnPlayerId: nextUserId,
+                          currentTurnPlayerId:
+                            roomSet[currentUserIndex]?.userId,
                         },
                       })
                       // Envia mensagem para todos informando o novo jogador a jogar o dado
