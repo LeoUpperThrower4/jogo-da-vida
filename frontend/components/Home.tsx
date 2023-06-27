@@ -25,12 +25,12 @@ export default function Home() {
                 Tecnologias Utilizadas
               </summary>
               <ul className="flex gap-6 pl-6">
-                <li className='flex align-middle gap-2 h-5'><Icon icon="vscode-icons:file-type-node" />Node.js</li>
-                <li className='flex align-middle gap-2 h-5'><Icon icon="simple-icons:fastify" />Fastify</li>
-                <li className='flex align-middle gap-2 h-5'><Icon icon="logos:react" />React.js</li>
-                <li className='flex align-middle gap-2 h-5'><Icon icon="nonicons:next-16" />Next.js</li>
-                <li className='flex align-middle gap-2 h-5'><Icon icon="devicon:tailwindcss" />Tailwind</li>
-                <li className='flex align-middle gap-2 h-5'><Icon icon="logos:websocket" />Websockets</li>
+                <li className='flex items-center gap-2 h-5 p-1'><Icon icon="vscode-icons:file-type-node" />Node.js</li>
+                <li className='flex items-center gap-2 h-5 p-1'><Icon icon="simple-icons:fastify" />Fastify</li>
+                <li className='flex items-center gap-2 h-5 p-1'><Icon icon="logos:react" />React.js</li>
+                <li className='flex items-center gap-2 h-5 p-1'><Icon icon="nonicons:next-16" />Next.js</li>
+                <li className='flex items-center gap-2 h-5 p-1'><Icon icon="devicon:tailwindcss" />Tailwind</li>
+                <li className='flex items-center gap-2 h-5 p-1'><Icon icon="logos:websocket" />Websockets</li>
               </ul>
             </details>
             <details open>
