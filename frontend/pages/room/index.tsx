@@ -7,6 +7,8 @@ import { useWebSocket } from "@/contexts/websocketsContext";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 
+import { ToastContainer, toast } from 'react-toastify';
+
 interface BackendPlayerPosition {
   playerId: string
   positionX: number
@@ -21,24 +23,13 @@ interface PlayerPosition {
 }
 
 export default function Room() {
-  const { roomId, userId, } = useRoom()
+  const { roomId, userId } = useRoom()
   const { getConnectionForRoom, createConnection, setCurrentSocket, emitDiceRoll, endConnection } = useWebSocket()
   const [diceValue, setDiceValue] = useState(-1)
   const [myTurn, setMyTurn] = useState(false)
   const [gameStarted, setGameStarted] = useState(false)
   const { addMessage } = useMessages()
   const [playersPositions, setPlayersPositions] = useState<PlayerPosition[]>([])
-  // const [myPlayerIndex, setMyPlayerIndex] = useState<number>(0)
-  // const [indexSet, setIndexSet] = useState<boolean>(false)
-
-
-  // useEffect(() => {
-  //   if (indexSet === false && playersPositions.length !== 0) {
-  //     setMyPlayerIndex(playersPositions.findIndex(player => player.id === userId))
-  //     setIndexSet(true)
-  //   }
-
-  // }, [playersPositions, gameStarted, userId, indexSet])
   const myPlayerIndex = playersPositions.findIndex(player => player.id === userId)
 
   useEffect(() => {
@@ -77,9 +68,31 @@ export default function Room() {
         }
         setPlayersPositions(initialPlayersPositions)
       } else if (data.type === 'roll_dice') {
-        setDiceValue(data.diceValue)
+        if (data.userId === userId) {
+          toast(`🎲 Você tirou ${data.diceValue}!`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          setDiceValue(data.diceValue)
+        } else {
+          toast(`🎲 O jogador ${data.username} tirou ${data.diceValue}!`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
       } else if (data.type === 'end_turn') {
-        console.log(data)
         setMyTurn(data.userIdCurrentTurn === userId)
         setPlayersPositions(data.newPlayersPositions.map((playerPosition: BackendPlayerPosition) => {
           return {
@@ -94,8 +107,31 @@ export default function Room() {
         setMyTurn(false)
         setPlayersPositions([])
         endConnection()
-        if (data.winnerId === userId) alert('Você ganhou!')
-        else alert('Você perdeu!')
+
+        if (data.winnerId === userId) {
+          toast.success(`Voce Ganhou!`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
+        else {
+          toast.error(`Voce perdeu! O jogador ${data.username} é o ganhador!`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
       }
     }
   }

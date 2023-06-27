@@ -52,7 +52,7 @@ export function Chat() {
                 ))
               ) : (
                 <div className=" flex flex-col items-center text-xs">
-                  <p className={message.type === 'exit' ? 'text-red-500' : 'text-green-500'}>{message.userId}</p>
+                  <p className={message.type === 'exit' ? 'text-red-500' : 'text-green-500'}>{message.userId === userId ? 'Você ' : message.username}</p>
                   <p className={message.type === 'exit' ? 'text-red-500' : 'text-green-500'}>{message.content}</p>
                 </div>
               )}
