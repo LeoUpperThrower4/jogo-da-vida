@@ -9,7 +9,7 @@ export default function Index() {
       <Head>
         <title>Corrida no Tabuleiro</title>
       </Head>
-      <Header />
+      <Header fixed />
       <Home />
 
     </div>
