@@ -99,7 +99,7 @@ export async function socketsRoutes(app: FastifyInstance) {
             roomSet.forEach((socket) => {
               const newMessage = JSON.stringify({
                 id: randomUUID().toString(),
-                username: username.name,
+                username: username?.name,
                 ...message,
               })
               socket.connection.send(newMessage)
@@ -209,6 +209,11 @@ export async function socketsRoutes(app: FastifyInstance) {
                     playerPosition.positionX === 4 &&
                     playerPosition.positionY === 4,
                 )
+                const username = await prisma.user.findFirst({
+                  where: {
+                    id: message.userId,
+                  },
+                })
                 if (finalPosition) {
                   // Envia mensagem para todos os jogadores que o jogo acabou
                   console.log(
@@ -219,6 +224,7 @@ export async function socketsRoutes(app: FastifyInstance) {
                       JSON.stringify({
                         for: 'game',
                         type: 'end_game',
+                        username: username?.name,
                         winnerId: finalPosition.playerId,
                       }),
                     )
@@ -245,16 +251,17 @@ export async function socketsRoutes(app: FastifyInstance) {
 
                 // Envia o valor do dado para todos os jogadores  e indica que o turno acabou
                 // retornando as novas posições e o novo jogador a jogar
+
                 roomSet.forEach((socket) => {
-                  if (socket.userId === message.userId) {
-                    socket.connection.send(
-                      JSON.stringify({
-                        for: 'game',
-                        type: 'roll_dice',
-                        diceValue,
-                      }),
-                    )
-                  }
+                  socket.connection.send(
+                    JSON.stringify({
+                      for: 'game',
+                      type: 'roll_dice',
+                      username: username?.name,
+                      userId: message.userId,
+                      diceValue,
+                    }),
+                  )
                   socket.connection.send(
                     JSON.stringify({
                       for: 'game',
