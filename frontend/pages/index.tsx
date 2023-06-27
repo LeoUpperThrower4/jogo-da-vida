@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Home from "@/components/Home";
-
 import Head from "next/head";
 
 export default function Index() {

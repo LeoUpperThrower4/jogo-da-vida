@@ -12,9 +12,9 @@ interface HeaderProps {
 // Componente Header que possui estados diferentes baseado em variáveis
 export default function Header({ leave, gameStarted }: HeaderProps) {
   return (
-    <header className="flex  w-screen h-[10vh] justify-between items-center px-8 py-6 border-b-2 border-gray-50">
+    <header className="flex w-screen h-[10vh] justify-between items-center px-8 py-6 border-b-2 border-gray-50 bg-zinc-800">
       <Link href="/" className="text-4xl ">Corrida no Tabuleiro - Redes </Link>
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-3">
         {/* Validação de botões a serem mostrados no componente */}
         {leave ? (
           <>
