@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { Icon } from '@iconify/react';
+
 export default function Home() {
   return (
     <main className="flex w-screen h-[90vh] p-10 gap-24 bg-white text-black">
@@ -19,16 +21,16 @@ export default function Home() {
               </p>
             </details>
             <details open>
-              <summary className="font-semibold border-b border-black max-w-fit">
+              <summary className="font-semibold border-b border-black max-w-fit mb-2">
                 Tecnologias Utilizadas
               </summary>
               <ul className="flex gap-6 pl-6">
-                <li>Node.js</li>
-                <li>Fastify</li>
-                <li>React.js</li>
-                <li>Next.js</li>
-                <li>Tailwind</li>
-                <li>Websockets</li>
+                <li className='flex align-middle gap-2 h-5'><Icon icon="vscode-icons:file-type-node" />Node.js</li>
+                <li className='flex align-middle gap-2 h-5'><Icon icon="simple-icons:fastify" />Fastify</li>
+                <li className='flex align-middle gap-2 h-5'><Icon icon="logos:react" />React.js</li>
+                <li className='flex align-middle gap-2 h-5'><Icon icon="nonicons:next-16" />Next.js</li>
+                <li className='flex align-middle gap-2 h-5'><Icon icon="devicon:tailwindcss" />Tailwind</li>
+                <li className='flex align-middle gap-2 h-5'><Icon icon="logos:websocket" />Websockets</li>
               </ul>
             </details>
             <details open>
